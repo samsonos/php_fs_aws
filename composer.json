@@ -1,0 +1,15 @@
+{
+	"name":"samsonos/php_upload_aws",
+	"require":{
+        "samsonos/php_core":"*",
+        "aws/aws-sdk-php": "2.*"
+    },
+	"license":"Open Software License (OSL) v 3.0",
+	"homepage":"http://samsonos.com/",
+    "autoload" : {
+        "classmap": ["src/"],
+        "psr-0": {
+            "samson\\upload\\": "src/",
+        }
+    }
+}
