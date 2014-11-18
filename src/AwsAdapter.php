@@ -5,13 +5,17 @@
  * Date: 17.11.2014
  * Time: 14:12
  */
-
 namespace samson\upload;
+
 use Aws\S3\S3Client;
 use Aws\Common\Credentials\Credentials;
 
-class AwsAdapter implements iAdapter {
-    public $adapterID = 'amazon';
+/**
+ * Amazon Web Services Adapter implementation
+ * @package samson\upload
+ */
+class AwsAdapter implements IAdapter
+{
     /** @var Credentials $credentials access key and secret key for amazon connect */
     protected $credentials;
 
@@ -19,28 +23,33 @@ class AwsAdapter implements iAdapter {
     protected $client;
 
     /** @var string $bucket Aws bucket name */
-    public static $bucket;
+    protected $bucket;
 
     /** @var string $accessKey */
-    public static $accessKey;
+    protected $accessKey;
 
     /** @var string $secretKey */
-    public static $secretKey;
+    protected $secretKey;
 
-    /** @var callable $handler External handler for creating amazon upload catalog name */
-    public static $handler;
-
-    /** @var string $awsUrl url of amazon bucket */
-    public static $awsUrl;
+    /** @var string $bucketURL Url of amazon bucket */
+    protected $bucketURL;
 
     /**
-     * @param string $accessKey Amazon access key
-     * @param string $secretKey Amazon secret key
-     * @param $bucket
+     * Adapter initialization
+     * @param array $params Collection of configuration parameters
+     * @see \samson\upload\iAdapter::init()
+     * @return mixed|void
      */
-    public function  __construct()
+    public function init($params)
     {
-        $this->credentials = new Credentials(AwsAdapter::$accessKey, AwsAdapter::$secretKey);
+        // TODO: Add parameters validation to avoid misconfiguration
+        $this->accessKey = $params['accessKey'];
+        $this->secretKey = $params['secretKey'];
+        $this->bucketURL = $params['bucketURL'];
+        $this->bucket = $params['bucket'];
+
+        // Create Authorization object
+        $this->credentials = new Credentials($this->accessKey, $this->secretKey);
 
         // Instantiate the S3 client with AWS credentials
         $this->client = S3Client::factory(array(
@@ -52,23 +61,21 @@ class AwsAdapter implements iAdapter {
      * @param $data
      * @param string $filename
      * @param string $uploadDir
+     * @see \samson\upload\iAdapter::write()
      * @return string Path to file
      */
-    public function putContent($data, $filename = '', $uploadDir = '')
+    public function write($data, $filename = '', $uploadDir = '')
     {
+        // Upload data to Amazon S3
         $this->client->putObject(array(
-            'Bucket'       => AwsAdapter::$bucket,
+            'Bucket'       => $this->bucket,
             'Key'          => $uploadDir.'/'.$filename,
             'Body'         => $data,
             'CacheControl' => 'max-age=1296000',
             'ACL'          => 'public-read'
         ));
 
-        return AwsAdapter::$awsUrl.'/'.$uploadDir;
-    }
-
-    public function getID()
-    {
-        return $this->adapterID;
+        // Build absolute path to uploaded resource
+        return $this->bucketURL.'/'.$uploadDir;
     }
 }
