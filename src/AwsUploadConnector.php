@@ -9,7 +9,7 @@
 namespace samson\upload;
 
 
-class AwsUploadConnector extends CompressableExternalModule {
+class AwsUploadConnector extends \samson\core\CompressableExternalModule {
     /** Идентификатор модуля */
     protected $id = 'samsonuploadaws';
 } 

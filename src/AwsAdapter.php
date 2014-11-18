@@ -76,6 +76,6 @@ class AwsAdapter implements IAdapter
         ));
 
         // Build absolute path to uploaded resource
-        return $this->bucketURL.'/'.$uploadDir;
+        return $this->bucketURL.'/'.$uploadDir.'/';
     }
 }
