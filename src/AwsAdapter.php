@@ -5,7 +5,7 @@
  * Date: 17.11.2014
  * Time: 14:12
  */
-namespace samson\upload;
+namespace samson\fs;
 
 use Aws\S3\S3Client;
 use Aws\Common\Credentials\Credentials;

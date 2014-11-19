@@ -6,7 +6,7 @@
  * Time: 22:46
  */
 
-namespace samson\upload;
+namespace samson\fs;
 
 
 class AwsUploadConnector extends \samson\core\CompressableExternalModule {
