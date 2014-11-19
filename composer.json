@@ -1,5 +1,5 @@
 {
-	"name":"samsonos/php_upload_aws",
+	"name":"samsonos/php_fs_aws",
 	"require":{
         "samsonos/php_core":"*",
         "aws/aws-sdk-php": "2.*"
