@@ -78,4 +78,28 @@ class AwsAdapter implements IAdapter
         // Build absolute path to uploaded resource
         return $this->bucketURL.'/'.$uploadDir.'/';
     }
+
+    public function exists($filename) {
+
+    }
+
+    public function getFile(& $filepath, $filename)
+    {
+        if (file_get_contents($filepath)) {
+            if (!is_dir('temp')) {
+                mkdir('temp', 0775);
+            }
+
+            $tempFile = 'temp/'.$filename;
+
+            file_put_contents($tempFile, file_get_contents($filepath));
+
+            $filepath = $tempFile;
+
+            return true;
+        }
+
+        return false;
+    }
+
 }
