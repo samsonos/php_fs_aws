@@ -9,7 +9,7 @@
     "autoload" : {
         "classmap": ["src/"],
         "psr-0": {
-            "samson\\upload\\": "src/"
+            "samson\\fs\\": "src/"
         }
     }
 }

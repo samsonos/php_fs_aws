@@ -9,7 +9,7 @@
 namespace samson\fs;
 
 
-class AwsUploadConnector extends \samson\core\CompressableExternalModule {
+class AwsFileSystemConnector extends \samson\core\CompressableExternalModule {
     /** Идентификатор модуля */
-    protected $id = 'samsonuploadaws';
+    protected $id = 'samson_fs_aws';
 } 
