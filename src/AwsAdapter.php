@@ -34,6 +34,9 @@ class AwsAdapter implements IAdapter
     /** @var string $bucketURL Url of amazon bucket */
     protected $bucketURL;
 
+    /** @var LocalAdapter  */
+    protected $localAdapter;
+
     /**
      * Adapter initialization
      * @param array $params Collection of configuration parameters
@@ -55,6 +58,8 @@ class AwsAdapter implements IAdapter
         $this->client = S3Client::factory(array(
             'credentials' => $this->credentials
         ));
+
+        $this->localAdapter = new LocalAdapter();
     }
 
     /**
@@ -80,26 +85,40 @@ class AwsAdapter implements IAdapter
     }
 
     public function exists($filename) {
-
+        return file_get_contents($filename);
     }
 
-    public function getFile(& $filepath, $filename)
+    public function read($fullname, $filename)
     {
-        if (file_get_contents($filepath)) {
-            if (!is_dir('temp')) {
-                mkdir('temp', 0775);
-            }
-
-            $tempFile = 'temp/'.$filename;
-
-            file_put_contents($tempFile, file_get_contents($filepath));
-
-            $filepath = $tempFile;
-
-            return true;
+        if (!is_dir('temp')) {
+            mkdir('temp', 0775);
         }
 
-        return false;
+        $tempFile = 'temp/'.$filename;
+
+        trace($this->localAdapter);
+        $this->localAdapter->write(file_get_contents($fullname), $filename, 'temp');
+
+        return $tempFile;
     }
 
+    public function writeFile($filePath, $filename, $uploadDir)
+    {
+        // Upload file to Amazon S3
+        $this->client->putObject(array(
+            'Bucket'       => $this->bucket,
+            'Key'          => $uploadDir.'/'.$filename,
+            'SourceFile'   => $filePath,
+            'CacheControl' => 'max-age=1296000',
+            'ACL'          => 'public-read'
+        ));
+    }
+
+    public function delete($filename)
+    {
+        $this->client->deleteObject(array(
+            'Bucket' => $this->bucket,
+            'Key'    => str_replace($this->bucketURL, '', $filename)
+        ));
+    }
 }
