@@ -39,17 +39,13 @@ class AwsAdapter implements IAdapter
 
     /**
      * Adapter initialization
-     * @param array $params Collection of configuration parameters
-     * @see \samson\upload\iAdapter::init()
-     * @return mixed|void
      */
-    public function init($params)
+    public function __construct()
     {
-        // TODO: Add parameters validation to avoid misconfiguration
-        $this->accessKey = $params['accessKey'];
-        $this->secretKey = $params['secretKey'];
-        $this->bucketURL = $params['bucketURL'];
-        $this->bucket = $params['bucket'];
+        $this->accessKey = m('samson_fs_aws')->adapterParameters['accessKey'];
+        $this->secretKey = m('samson_fs_aws')->adapterParameters['secretKey'];
+        $this->bucketURL = m('samson_fs_aws')->adapterParameters['bucketURL'];
+        $this->bucket = m('samson_fs_aws')->adapterParameters['bucket'];
 
         // Create Authorization object
         $this->credentials = new Credentials($this->accessKey, $this->secretKey);
@@ -90,19 +86,18 @@ class AwsAdapter implements IAdapter
 
     public function read($fullname, $filename)
     {
+        // Create temporary catalog
         if (!is_dir('temp')) {
             mkdir('temp', 0775);
         }
 
-        $tempFile = 'temp/'.$filename;
-
-        trace($this->localAdapter);
+        // Create file in local file system
         $this->localAdapter->write(file_get_contents($fullname), $filename, 'temp');
 
-        return $tempFile;
+        return 'temp/'.$filename;
     }
 
-    public function writeFile($filePath, $filename, $uploadDir)
+    public function copy($filePath, $filename, $uploadDir)
     {
         // Upload file to Amazon S3
         $this->client->putObject(array(
@@ -114,11 +109,11 @@ class AwsAdapter implements IAdapter
         ));
     }
 
-    public function delete($filename)
+    public function delete($filePath)
     {
         $this->client->deleteObject(array(
             'Bucket' => $this->bucket,
-            'Key'    => str_replace($this->bucketURL, '', $filename)
+            'Key'    => str_replace($this->bucketURL, '', $filePath)
         ));
     }
 }

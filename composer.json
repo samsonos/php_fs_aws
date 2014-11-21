@@ -2,6 +2,8 @@
 	"name":"samsonos/php_fs_aws",
 	"require":{
         "samsonos/php_core":"*",
+        "samsonos/php_fs":"*",
+        "samsonos/php_fs_local":"*",
         "aws/aws-sdk-php": "2.*"
     },
 	"license":"Open Software License (OSL) v 3.0",
