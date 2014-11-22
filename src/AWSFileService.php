@@ -92,6 +92,8 @@ class AWSFileService extends \samson\core\CompressableService implements IFileSy
      */
     public function read($fullname, $filename = null)
     {
+        // TODO: Why this if we have - S3Client::getObject()?
+
         // Create temporary catalog
         if (!is_dir('temp')) {
             mkdir('temp', 0775);
@@ -112,6 +114,8 @@ class AWSFileService extends \samson\core\CompressableService implements IFileSy
      */
     public function move($filePath, $filename, $uploadDir)
     {
+        // TODO: What difference with current write()?
+
         // Upload file to Amazon S3
         $this->client->putObject(array(
             'Bucket'       => $this->bucket,
@@ -124,7 +128,7 @@ class AWSFileService extends \samson\core\CompressableService implements IFileSy
 
     /**
      * Delete file from current file system
-     * @param $filename string File for deleting
+     * @param $filePath string File for deleting
      * @return mixed
      */
     public function delete($filePath)
