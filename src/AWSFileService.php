@@ -81,6 +81,8 @@ class AWSFileService extends \samson\core\CompressableService implements IFileSy
      */
     public function exists($filename)
     {
+        // TODO: Change to curl - as this method fetches all responce!
+        
         return file_get_contents($filename);
     }
 
