@@ -52,11 +52,12 @@ class AWSFileService extends \samson\core\CompressableService implements IFileSy
     }
 
     /**
-     * @param $data
-     * @param string $filename
-     * @param string $uploadDir
-     * @see \samson\fs\iAdapter::write()
-     * @return string Path to file
+     * Write data to a specific relative location
+     *
+     * @param mixed $data Data to be written
+     * @param string $filename File name
+     * @param string $uploadDir Relative file path
+     * @return string|boolean Relative path to created file, false if there were errors
      */
     public function write($data, $filename = '', $uploadDir = '')
     {
@@ -73,11 +74,22 @@ class AWSFileService extends \samson\core\CompressableService implements IFileSy
         return $this->bucketURL.'/'.$uploadDir.'/';
     }
 
+    /**
+     * Check existing current file in current file system
+     * @param $filename string Filename
+     * @return boolean File exists or not
+     */
     public function exists($filename)
     {
         return file_get_contents($filename);
     }
 
+    /**
+     * Read the file from current file system
+     * @param $filePath string Path to file
+     * @param $filename string
+     * @return mixed
+     */
     public function read($fullname, $filename = null)
     {
         // Create temporary catalog
@@ -91,6 +103,13 @@ class AWSFileService extends \samson\core\CompressableService implements IFileSy
         return 'temp/'.$filename;
     }
 
+    /**
+     * Write a file to selected location
+     * @param $filePath string Path to file
+     * @param $filename string
+     * @param $uploadDir string
+     * @return mixed
+     */
     public function move($filePath, $filename, $uploadDir)
     {
         // Upload file to Amazon S3
@@ -103,6 +122,11 @@ class AWSFileService extends \samson\core\CompressableService implements IFileSy
         ));
     }
 
+    /**
+     * Delete file from current file system
+     * @param $filename string File for deleting
+     * @return mixed
+     */
     public function delete($filePath)
     {
         $this->client->deleteObject(array(
