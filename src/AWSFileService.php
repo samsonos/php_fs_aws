@@ -14,48 +14,41 @@ use Aws\Common\Credentials\Credentials;
  * Amazon Web Services Adapter implementation
  * @package samson\upload
  */
-class AwsAdapter implements IAdapter
+class AWSFileService extends \samson\core\CompressableService implements IFileSystem
 {
-    /** @var Credentials $credentials access key and secret key for amazon connect */
-    protected $credentials;
+    /** @var string Identifier */
+    protected $id = 'fs_aws';
 
     /** @var S3Client $client Aws services user */
     protected $client;
 
+    /** @var \samson\fs\LocalFileService Pointer to local file service  */
+    protected $localFS;
+
     /** @var string $bucket Aws bucket name */
-    protected $bucket;
+    public $bucket;
 
     /** @var string $accessKey */
-    protected $accessKey;
+    public $accessKey;
 
     /** @var string $secretKey */
-    protected $secretKey;
+    public $secretKey;
 
     /** @var string $bucketURL Url of amazon bucket */
-    protected $bucketURL;
-
-    /** @var LocalAdapter  */
-    protected $localAdapter;
+    public $bucketURL;
 
     /**
      * Adapter initialization
      */
     public function __construct()
     {
-        $this->accessKey = m('samson_fs_aws')->adapterParameters['accessKey'];
-        $this->secretKey = m('samson_fs_aws')->adapterParameters['secretKey'];
-        $this->bucketURL = m('samson_fs_aws')->adapterParameters['bucketURL'];
-        $this->bucket = m('samson_fs_aws')->adapterParameters['bucket'];
-
-        // Create Authorization object
-        $this->credentials = new Credentials($this->accessKey, $this->secretKey);
-
-        // Instantiate the S3 client with AWS credentials
+        // Create Authorization object and instantiate the S3 client with AWS credentials
         $this->client = S3Client::factory(array(
-            'credentials' => $this->credentials
+            'credentials' => new Credentials($this->accessKey, $this->secretKey)
         ));
 
-        $this->localAdapter = new LocalAdapter();
+        // Set pointer to local file system service
+        $this->localFS = & m('fs_local');
     }
 
     /**
@@ -80,11 +73,12 @@ class AwsAdapter implements IAdapter
         return $this->bucketURL.'/'.$uploadDir.'/';
     }
 
-    public function exists($filename) {
+    public function exists($filename)
+    {
         return file_get_contents($filename);
     }
 
-    public function read($fullname, $filename)
+    public function read($fullname, $filename = null)
     {
         // Create temporary catalog
         if (!is_dir('temp')) {
@@ -92,12 +86,12 @@ class AwsAdapter implements IAdapter
         }
 
         // Create file in local file system
-        $this->localAdapter->write(file_get_contents($fullname), $filename, 'temp');
+        $this->localFS->write(file_get_contents($fullname), $filename, 'temp');
 
         return 'temp/'.$filename;
     }
 
-    public function copy($filePath, $filename, $uploadDir)
+    public function move($filePath, $filename, $uploadDir)
     {
         // Upload file to Amazon S3
         $this->client->putObject(array(
