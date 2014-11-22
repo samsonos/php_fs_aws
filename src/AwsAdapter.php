@@ -62,7 +62,7 @@ class AwsAdapter implements IAdapter
      * @param $data
      * @param string $filename
      * @param string $uploadDir
-     * @see \samson\upload\iAdapter::write()
+     * @see \samson\fs\iAdapter::write()
      * @return string Path to file
      */
     public function write($data, $filename = '', $uploadDir = '')
