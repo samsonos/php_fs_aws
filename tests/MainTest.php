@@ -44,7 +44,7 @@ class MainTest extends \PHPUnit_Framework_TestCase
     /** Test file service init */
     public function testInit()
     {
-        // Initialize service without our S3 client
+        // Initialize service without our S3 client 
         $this->fileService->init();
     }
 
