@@ -9,15 +9,20 @@ use samson\fs\LocalFileService;
  * Created by Vitaly Iegorov <egorov@samsonos.com>
  * on 04.08.14 at 16:42
  */
-class AwsTest extends \PHPUnit_Framework_TestCase
+class MainTest extends \PHPUnit_Framework_TestCase
 {
-    /** @var \samson\fs\FileService Pointer to file service */
+    /** @var \samson\fs\AWSFileService Pointer to file service */
     public $fileService;
+
+    /** @var S3Client AWS mock */
+    public $client;
 
     /** Tests init */
     public function setUp()
     {
-        $this->fileService = new AWSFileService(__DIR__.'../');
+        // Get instance using services factory as error will signal other way
+        $this->fileService = \samson\core\Service::getInstance('samson\fs\AWSFileService');
+<<<<<<< HEAD
     }
 
     /** Test initialize without client passing*/
@@ -26,47 +31,40 @@ class AwsTest extends \PHPUnit_Framework_TestCase
         // Initialize service with our S3 client
         $result = $this->fileService->init();
 
-<<<<<<< HEAD
-        // Set access and secret keys
-        $this->fileService->accessKey = '';
-        $this->fileService->secretKey = '';
-=======
-        // Perform test
-        $this->assertNotEquals(false, $result, 'AWS File service initialization with client passed failed');
-    }
+        // Set test bucket URL
+        $this->fileService->bucketURL = 'http://testbucket';
 
-    /** Test initialize with client passing*/
-    public function testInitializeWithClient()
-    {
         // Create S3 mock
-        $client = $this->getMockBuilder('Aws\S3\S3Client')
+        $this->client = $this->getMockBuilder('Aws\S3\S3Client')
             ->disableOriginalConstructor()
             ->getMock();
->>>>>>> 7fc0afd... Added possible client instance passing for interacting with AWS S3
 
         // Initialize service with our S3 client
-        $result = $this->fileService->init(array(&$client));
-
-        // Perform test
-        $this->assertNotEquals(false, $result, 'AWS File service initialization with client passed failed');
+        $this->fileService->init(array(&$this->client));
     }
 
-    /** Test reading */
-   /* public function testRead()
+    /** Test initialize without client passing*/
+    public function testInitialize()
     {
-        // Create instance
-        $this->fileService = new AWSFileService(__DIR__.'../');
+        // Perform test
+        $this->assertNotEquals(false, false, 'AWS File service initialization with client passed failed');
+    }
 
-        $filePath = 'http://static.landscape.ua/company27338/catalog/dekorativnij-grynt-salatovuj-1-kg-01jpg';
+    /** Test file service writing */
+    public function testWrite()
+    {
+        // Set remove dir
+        $remoteDir = '/remote/';
 
-        $filename = 'dekorativnij-grynt-salatovuj-1-kg-01.jpg';
+        // Perform write
+        $writtenFile = $this->fileService->write('123', 'level1/level2/', $remoteDir);
 
-        // Read current file data
-        $data = $this->fileService->read($filePath, $filename);
-
-        // Compare current file with data readed
-        $this->assertStringEqualsFile(__FILE__, $data, 'File service read failed');
-    }*/
+        // Compare current file with data read
+        $this->assertEquals(
+            $this->fileService->bucketURL.$remoteDir,
+            $writtenFile
+        );
+    }
 
     /** Test file service writing and reading */
     /*public function testWriteRead()

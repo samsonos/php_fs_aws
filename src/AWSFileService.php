@@ -54,9 +54,6 @@ class AWSFileService extends \samson\core\CompressableService implements IFileSy
             ));
         }
 
-        // Set pointer to local file system service
-        $this->localFS = & m('fs_local');
-
         // Call parent initialization
         return parent::init($params);
     }
@@ -81,7 +78,7 @@ class AWSFileService extends \samson\core\CompressableService implements IFileSy
         ));
 
         // Build absolute path to uploaded resource
-        return $this->bucketURL.'/'.$uploadDir.'/';
+        return $this->bucketURL.'/'.(isset($uploadDir{0}) ? $uploadDir . '/' : '');
     }
 
     /**
@@ -98,23 +95,13 @@ class AWSFileService extends \samson\core\CompressableService implements IFileSy
 
     /**
      * Read the file from current file system
-     * @param $filePath string Path to file
-     * @param $filename string
-     * @return mixed
+     * @param $filePath string Full path to file
+     * @param $filename string File name
+     * @return string File data
      */
     public function read($filePath, $filename = null)
     {
-        // TODO: Why this if we have - S3Client::getObject()?
-
-        // Create temporary catalog
-        if (!is_dir('temp')) {
-            mkdir('temp', 0775);
-        }
-
-        // Create file in local file system
-        $this->localFS->write(file_get_contents($filePath), $filename, 'temp');
-
-        return 'temp/'.$filename;
+        return file_get_contents($filePath);
     }
 
     /**
@@ -126,8 +113,6 @@ class AWSFileService extends \samson\core\CompressableService implements IFileSy
      */
     public function move($filePath, $filename, $uploadDir)
     {
-        // TODO: What difference with current write()?
-
         // Upload file to Amazon S3
         $this->client->putObject(array(
             'Bucket'       => $this->bucket,
@@ -136,6 +121,9 @@ class AWSFileService extends \samson\core\CompressableService implements IFileSy
             'CacheControl' => 'max-age=1296000',
             'ACL'          => 'public-read'
         ));
+
+        // Remove current file
+        $this->delete($filePath);
     }
 
     /**
