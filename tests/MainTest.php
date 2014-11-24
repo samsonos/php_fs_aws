@@ -44,7 +44,7 @@ class MainTest extends \PHPUnit_Framework_TestCase
             ->getMock();
 
         // Initialize service with our S3 client
-        $this->fileService->init(array('client' => $this->client));
+        $this->fileService->init(array('client' => & $this->client));
     }
 
     /** Test file service writing */
@@ -91,6 +91,8 @@ class MainTest extends \PHPUnit_Framework_TestCase
         $this->client->expects($this->any())
             ->method('if_object_exists')
             ->will($this->returnValue(true));
+
+        trace();
 
         // Perform test
         $this->assertEquals(true, $this->fileService->exists(__FILE__));
