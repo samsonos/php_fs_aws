@@ -48,7 +48,7 @@ class AWSFileService extends \samson\core\CompressableService implements IFileSy
     public function init(array $params = array())
     {
         // Get client object instance from input parameters
-        $this->client = & $params['client'];
+        $this->client = $params['client'];
         // No client is passed
         if (!isset($params['client'])) {
             // Use S3 clients, create authorization object and instantiate the S3 client with AWS credentials
