@@ -43,25 +43,19 @@ class MainTest extends \PHPUnit_Framework_TestCase
         $this->fileService->init(array('client' => &$this->client));
     }
 
-    /** Test initialize without client passing*/
-    public function testInitialize()
-    {
-        // Perform test
-        $this->assertNotEquals(false, false, 'AWS File service initialization with client passed failed');
-    }
-
     /** Test file service writing */
     public function testWrite()
     {
         // Set remove dir
-        $remoteDir = '/remote/';
+        $remoteDir = '/remote';
+        $fileName = 'test.txt';
 
         // Perform write
-        $writtenFile = $this->fileService->write('123', 'level1/level2/', $remoteDir);
+        $writtenFile = $this->fileService->write('123', $fileName, $remoteDir);
 
         // Compare current file with data read
         $this->assertEquals(
-            $this->fileService->bucketURL.$remoteDir,
+            $this->fileService->bucketURL.$remoteDir.$fileName,
             $writtenFile
         );
     }
