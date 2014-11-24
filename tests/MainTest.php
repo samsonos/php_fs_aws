@@ -74,10 +74,10 @@ class MainTest extends \PHPUnit_Framework_TestCase
     public function testDelete()
     {
         // Delete temporary file
-        $result = $this->fileService->delete(tempnam(sys_get_temp_dir(), 'test'));
+        $this->fileService->delete(tempnam(sys_get_temp_dir(), 'test'));
 
         // Perform test
-        $this->assertFileNotExists($result, 'File service deleting failed');
+        $this->assertFileNotExists('test');
     }
 
     /** Test file service existing */
