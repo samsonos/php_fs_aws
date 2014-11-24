@@ -140,4 +140,22 @@ class AWSFileService extends \samson\core\CompressableService implements IFileSy
             'Key'    => str_replace($this->bucketURL, '', $filePath)
         ));
     }
+
+    /**
+     * Get file extension in current file system
+     * @param $filePath string Path
+     * @return string|bool false if extension not found, otherwise file extension
+     */
+    public function extension($filePath)
+    {
+        // Get last three symbols of file path
+        $extension = substr($filePath, -3);
+
+        // Fix jpeg extension
+        if ($extension == 'peg') {
+            $extension = 'jpeg';
+        }
+
+        return $extension;
+    }
 }

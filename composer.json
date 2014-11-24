@@ -6,6 +6,11 @@
         "samsonos/php_fs_local":"*",
         "aws/aws-sdk-php": "2.*"
     },
+    "require-dev": {
+        "satooshi/php-coveralls": "dev-master",
+        "squizlabs/php_codesniffer": "2.0.*@dev",
+        "phpunit/phpunit": "4.2.*"
+    },
 	"license":"Open Software License (OSL) v 3.0",
 	"homepage":"http://samsonos.com/",
     "autoload" : {
