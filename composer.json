@@ -1,6 +1,19 @@
 {
 	"name":"samsonos/php_fs_aws",
-	"require":{
+    "description": "SamsonPHP aws file system service",
+    "keywords": [ "file system", "samsonphp"],
+    "authors":[
+        {
+            "name":"Vitaly Iegorov",
+            "email":"egorov@samsonos.com"
+        },
+        {
+            "name":"Onysko Pavlo",
+            "email":"onysko@samsonos.com"
+        }
+    ],
+    "minimum-stability":"dev",
+    "require":{
         "samsonos/php_fs":"1.0.*",
         "samsonos/php_fs_local":"1.0.*",
         "aws/aws-sdk-php": "2.*"
