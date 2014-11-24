@@ -22,9 +22,6 @@ class AWSFileService extends \samson\core\CompressableService implements IFileSy
     /** @var S3Client $client Aws services user */
     protected $client;
 
-    /** @var \samson\fs\LocalFileService Pointer to local file service  */
-    protected $localFS;
-
     /** @var string $bucket Aws bucket name */
     public $bucket;
 
@@ -81,17 +78,19 @@ class AWSFileService extends \samson\core\CompressableService implements IFileSy
         ));
 
         // Build absolute path to uploaded resource
-        return $this->bucketURL.'/'.(isset($uploadDir{0}) ? $uploadDir . '/' : '').$filename;
+        return $this->bucketURL.'/'.(isset($uploadDir{0}) ? $uploadDir . '/' : '');
     }
 
     /**
      * Check existing current file in current file system
-     * @param $filename string Filename
+     * @param $url string Url
      * @return boolean File exists or not
      */
-    public function exists($filename)
+    public function exists($url)
     {
-        return $this->client->if_object_exists($this->bucket, $filename);
+        // Get file key name on amazon s3
+        $fileKey = str_replace($this->bucketURL.'/', '', $url);
+        return $this->client->doesObjectExist($this->bucket, $fileKey);
     }
 
     /**
