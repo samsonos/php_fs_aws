@@ -44,7 +44,9 @@ class MainTest extends \PHPUnit_Framework_TestCase
 
         // Add method stub
         $this->client->method('if_object_exists')
-            ->willReturn(true);
+            ->willReturn('i exists!');
+
+        trace('obj: '.$this->client->if_object_exists());
 
         // Initialize service with our S3 client
         $this->fileService->init(array('client' => & $this->client));
