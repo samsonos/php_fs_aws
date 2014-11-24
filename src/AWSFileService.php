@@ -78,7 +78,7 @@ class AWSFileService extends \samson\core\CompressableService implements IFileSy
         ));
 
         // Build absolute path to uploaded resource
-        return $this->bucketURL.'/'.(isset($uploadDir{0}) ? $uploadDir . '/' : '');
+        return $this->bucketURL.'/'.(isset($uploadDir{0}) ? $uploadDir . '/' : '').$filename;
     }
 
     /**

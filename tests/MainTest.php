@@ -47,7 +47,7 @@ class MainTest extends \PHPUnit_Framework_TestCase
     public function testWrite()
     {
         // Set remove dir
-        $remoteDir = '/remote';
+        $remoteDir = 'remote';
         $fileName = 'test.txt';
 
         // Perform write
