@@ -120,10 +120,14 @@ class MainTest extends \PHPUnit_Framework_TestCase
             ->expects($this->once())
             ->method('doesObjectExist')
             ->willReturn(true);
-        
+
         // Create temporary file
         $path = tempnam(sys_get_temp_dir(), 'test');
 
+        // Move existing file
+        $this->fileService->move($path, basename($path), 'remote/');
+
+        // Move null file
         $this->fileService->move($path, basename($path), 'remote/');
 
         // Perform test
