@@ -94,6 +94,11 @@ class MainTest extends \PHPUnit_Framework_TestCase
     /** Test file service existing */
     public function testExists()
     {
+        // Add method stub
+        $this->client->expects($this->once())
+            ->method('if_object_exists')
+            ->will($this->returnValue(true));
+
         // Write data to temporary file
         $exists = $this->fileService->exists(__FILE__);
 
