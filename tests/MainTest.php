@@ -42,13 +42,6 @@ class MainTest extends \PHPUnit_Framework_TestCase
             ->disableOriginalConstructor()
             ->getMock();
 
-        // Add method stub
-        $this->client->expects($this->any())
-            ->method('if_object_exists')
-            ->will($this->returnValue('true'));
-
-        trace('if_object_exists:'.$this->client->if_object_exists());
-
         // Initialize service with our S3 client
         $this->fileService->init(array('client' => & $this->client));
     }
@@ -93,6 +86,10 @@ class MainTest extends \PHPUnit_Framework_TestCase
     /** Test file service existing */
     public function testExists()
     {
+        // Add method stub
+        $this->client->method('if_object_exists')
+            ->willReturn(true);
+
         // Perform test
         $this->assertEquals(true, $this->fileService->exists(__FILE__));
     }
