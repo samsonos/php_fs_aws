@@ -47,6 +47,8 @@ class MainTest extends \PHPUnit_Framework_TestCase
             ->method('if_object_exists')
             ->will($this->returnValue(true));
 
+        trace('if_object_exists:'.$this->client->if_object_exists());
+
         // Initialize service with our S3 client
         $this->fileService->init(array('client' => & $this->client));
     }
