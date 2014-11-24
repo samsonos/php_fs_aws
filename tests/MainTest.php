@@ -96,53 +96,31 @@ class MainTest extends \PHPUnit_Framework_TestCase
         $this->assertEquals(true, $exists, 'File service exists failed');
     }
 
-    /** Test file service moving */
-    /*public function testMove()
+    /** Test file service extension */
+    public function testExtension()
     {
-        // Get instance using services factory as error will signal other way
-        $this->fileService = \samson\core\Service::getInstance('samson\fs\LocalFileService');
+        // Perform test
+        $this->assertEquals(
+            'php',
+            $this->fileService->extension(__FILE__)
+        );
 
+        // Perform test 4 letter extension
+        $this->assertEquals(
+            'jpeg',
+            $this->fileService->extension('test.jpeg')
+        );
+    }
+
+    /** Test file service move */
+    public function testMove()
+    {
         // Create temporary file
         $path = tempnam(sys_get_temp_dir(), 'test');
 
-        // Create test dir
-        $testDir = sys_get_temp_dir().'/testDir/';
-        mkdir($testDir, 0777);
-
-        // Move file to a new dir
-        $newPath = $this->fileService->move($path, basename($path), $testDir);
+        $this->fileService->move($path, basename($path), 'remote/');
 
         // Perform test
-        $this->assertFileExists($newPath, 'File service move failed - Moved file not found');
-        $this->assertFileNotExists($path, 'File service move failed - Original file is not deleted');
-    }*/
-
-    /** Test file service moving to existing file */
-    /*public function testMoveToExisting()
-    {
-        // Get instance using services factory as error will signal other way
-        $this->fileService = \samson\core\Service::getInstance('samson\fs\LocalFileService');
-
-        // Create temporary file
-        $path = tempnam(sys_get_temp_dir(), 'test');
-
-        // Move file to a new dir
-        $newPath = $this->fileService->move($path, basename($path), dirname($path));
-
-        // Perform test
-        $this->assertEquals(false, $newPath, 'File service move failed - Moved file not found');
-    }*/
-
-    /** Test file service extension method */
-    /*public function testExtension()
-    {
-        // Get instance using services factory as error will signal other way
-        $this->fileService = \samson\core\Service::getInstance('samson\fs\LocalFileService');
-
-        // Move file to a new dir
-        $extension = $this->fileService->extension(__FILE__);
-
-        // Perform test
-        $this->assertEquals('php', $extension, 'File service extension method failed - Extension is not correct');
-    }*/
+        $this->assertFileNotExists($path);
+    }
 }
