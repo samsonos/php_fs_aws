@@ -127,11 +127,21 @@ class MainTest extends \PHPUnit_Framework_TestCase
         // Move existing file
         $this->fileService->move($path, basename($path), 'remote/');
 
+        // Perform test
+        $this->assertEquals(true, true);
+    }
+
+    /** Test file service move failed */
+    public function testMoveFail()
+    {
         // Add method stub
         $this->client
             ->expects($this->once())
             ->method('doesObjectExist')
             ->willReturn(false);
+
+        // Create temporary file
+        $path = tempnam(sys_get_temp_dir(), 'test');
 
         // Move null file
         $this->fileService->move($path, basename($path), 'remote/');
