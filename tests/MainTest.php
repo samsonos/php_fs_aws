@@ -37,8 +37,11 @@ class MainTest extends \PHPUnit_Framework_TestCase
         // Create S3 mock
         $this->client = $this->getMockBuilder('Aws\S3\S3Client')
             ->disableOriginalConstructor()
-            //->setMethods(array('if_object_exists'))
+            ->setMethods(array('if_object_exists'))
             ->getMock();
+
+        // Initialize service with our S3 client
+        $this->fileService->init(array('client' => &$this->client));
     }
 
     /** Test file service init */
@@ -46,13 +49,6 @@ class MainTest extends \PHPUnit_Framework_TestCase
     {
         // Initialize service without our S3 client
         $this->fileService->init();
-    }
-
-    /** Test file service init */
-    public function testInitWithClient()
-    {
-        // Initialize service with our S3 client
-        $this->fileService->init(array('client' => &$this->client));
     }
 
     /** Test file service writing */
