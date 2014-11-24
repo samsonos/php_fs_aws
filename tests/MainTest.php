@@ -66,24 +66,15 @@ class MainTest extends \PHPUnit_Framework_TestCase
         );
     }
 
-    /** Test file service writing and reading */
-    /*public function testWriteRead()
+    /** Test file service reading */
+    public function testRead()
     {
-        // Get instance using services factory as error will signal other way
-        $this->fileService = \samson\core\Service::getInstance('samson\fs\LocalFileService');
-
-        // Create temporary file
-        $path = tempnam(sys_get_temp_dir(), 'test');
-
-        // Write data to temporary file
-        $this->fileService->write('123', $path);
-
-        // Read data from file
-        $data = $this->fileService->read($path);
+        // Perform write
+        $data = $this->fileService->read('123', __FILE__);
 
         // Perform test
-        $this->assertEquals('123', $data, 'File service writing failed');
-    }*/
+        $this->assertEquals('123', $data, 'File service reading failed');
+    }
 
     /** Test file service writing failed */
    /* public function testFailWrite()
