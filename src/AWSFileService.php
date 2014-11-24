@@ -44,10 +44,15 @@ class AWSFileService extends \samson\core\CompressableService implements IFileSy
      */
     public function init(array $params = array())
     {
-        // Create Authorization object and instantiate the S3 client with AWS credentials
-        $this->client = S3Client::factory(array(
-            'credentials' => new Credentials($this->accessKey, $this->secretKey)
-        ));
+        // Get client object instance from input parameters
+        $this->client = & $params['client'];
+        // No client is passed
+        if (!isset($params['client'])) {
+            // Use S3 clients, create authorization object and instantiate the S3 client with AWS credentials
+            $this->client = S3Client::factory(array(
+                'credentials' => new Credentials($this->accessKey, $this->secretKey)
+            ));
+        }
 
         // Set pointer to local file system service
         $this->localFS = & m('fs_local');

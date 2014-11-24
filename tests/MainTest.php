@@ -14,20 +14,41 @@ class AwsTest extends \PHPUnit_Framework_TestCase
     /** @var \samson\fs\FileService Pointer to file service */
     public $fileService;
 
+    /** Tests init */
+    public function setUp()
+    {
+        $this->fileService = new AWSFileService(__DIR__.'../');
+    }
+
+    /** Test initialize without client passing*/
     public function testInitialize()
     {
-        // Create instance
-        $this->fileService = new AWSFileService(__DIR__.'../');
+        // Initialize service with our S3 client
+        $result = $this->fileService->init();
 
+<<<<<<< HEAD
         // Set access and secret keys
         $this->fileService->accessKey = '';
         $this->fileService->secretKey = '';
+=======
+        // Perform test
+        $this->assertNotEquals(false, $result, 'AWS File service initialization with client passed failed');
+    }
 
-        // Initialize service
-        $this->fileService->init(array(''));
+    /** Test initialize with client passing*/
+    public function testInitializeWithClient()
+    {
+        // Create S3 mock
+        $client = $this->getMockBuilder('Aws\S3\S3Client')
+            ->disableOriginalConstructor()
+            ->getMock();
+>>>>>>> 7fc0afd... Added possible client instance passing for interacting with AWS S3
+
+        // Initialize service with our S3 client
+        $result = $this->fileService->init(array(&$client));
 
         // Perform test
-        $this->assertNotEmpty($this->fileService, 'File service initialization failed');
+        $this->assertNotEquals(false, $result, 'AWS File service initialization with client passed failed');
     }
 
     /** Test reading */
