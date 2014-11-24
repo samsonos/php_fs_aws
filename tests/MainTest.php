@@ -40,7 +40,16 @@ class MainTest extends \PHPUnit_Framework_TestCase
         // Create S3 mock
         $this->client = $this->getMockBuilder('Aws\S3\S3Client')
             ->disableOriginalConstructor()
+            ->setMethods(array('if_object_exists'))
             ->getMock();
+
+        // Add method stub
+        $this->client
+            ->expects($this->once())
+            ->method('if_object_exists')
+            ->willReturn('i exists!');
+
+        trace('obj: '.$this->client->if_object_exists());
 
         trace($this->client);
 
