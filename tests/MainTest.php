@@ -95,7 +95,7 @@ class MainTest extends \PHPUnit_Framework_TestCase
     public function testExists()
     {
         // Add method stub
-        $this->client->expects($this->once())
+        $this->client->expects($this->any())
             ->method('if_object_exists')
             ->will($this->returnValue(true));
 
