@@ -40,7 +40,6 @@ class MainTest extends \PHPUnit_Framework_TestCase
         // Create S3 mock
         $this->client = $this->getMockBuilder('Aws\S3\S3Client')
             ->disableOriginalConstructor()
-            //->setMethods(array('if_object_exists'))
             ->getMock();
 
         // Initialize service with our S3 client
@@ -116,6 +115,12 @@ class MainTest extends \PHPUnit_Framework_TestCase
     /** Test file service move */
     public function testMove()
     {
+        // Add method stub
+        $this->client
+            ->expects($this->once())
+            ->method('doesObjectExist')
+            ->willReturn(true);
+        
         // Create temporary file
         $path = tempnam(sys_get_temp_dir(), 'test');
 
