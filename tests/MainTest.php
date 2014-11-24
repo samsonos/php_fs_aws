@@ -43,7 +43,7 @@ class MainTest extends \PHPUnit_Framework_TestCase
             ->getMock();
 
         // Initialize service with our S3 client
-        $this->fileService->init(array('client' => &$this->client));
+        $this->fileService->init(array('client' => $this->client));
     }
 
     /** Test file service writing */
