@@ -37,6 +37,7 @@ class MainTest extends \PHPUnit_Framework_TestCase
         // Create S3 mock
         $this->client = $this->getMockBuilder('Aws\S3\S3Client')
             ->disableOriginalConstructor()
+            ->setMethods(array('if_object_exists'))
             ->getMock();
     }
 
@@ -99,11 +100,8 @@ class MainTest extends \PHPUnit_Framework_TestCase
             ->method('if_object_exists')
             ->will($this->returnValue(true));
 
-        // Write data to temporary file
-        $exists = $this->fileService->exists(__FILE__);
-
         // Perform test
-        $this->assertEquals(true, $exists, 'File service exists failed');
+        $this->assertEquals(true, $this->fileService->exists(__FILE__));
     }
 
     /** Test file service extension */
