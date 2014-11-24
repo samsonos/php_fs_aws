@@ -90,7 +90,7 @@ class AWSFileService extends \samson\core\CompressableService implements IFileSy
     {
         // TODO: Change to curl - as this method fetches all response!
         
-        return file_get_contents($filename);
+        return file_get_contents($filename) > 0;
     }
 
     /**

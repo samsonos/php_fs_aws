@@ -89,14 +89,8 @@ class MainTest extends \PHPUnit_Framework_TestCase
     /** Test file service existing */
     public function testExists()
     {
-        // Get instance using services factory as error will signal other way
-        $this->fileService = \samson\core\Service::getInstance('samson\fs\LocalFileService');
-
-        // Create temporary file
-        $path = tempnam(sys_get_temp_dir(), 'test');
-
         // Write data to temporary file
-        $exists = $this->fileService->exists($path);
+        $exists = $this->fileService->exists(__FILE__);
 
         // Perform test
         $this->assertEquals(true, $exists, 'File service exists failed');
