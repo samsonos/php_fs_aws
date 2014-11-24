@@ -37,6 +37,9 @@ class AWSFileService extends \samson\core\CompressableService implements IFileSy
     /** @var string $bucketURL Url of amazon bucket */
     public $bucketURL;
 
+    /** @var int Resource caching age */
+    public $maxAge = 1296000;
+
     /**
      * Adapter initialization
      * @param array $params
@@ -73,7 +76,7 @@ class AWSFileService extends \samson\core\CompressableService implements IFileSy
             'Bucket'       => $this->bucket,
             'Key'          => $uploadDir.'/'.$filename,
             'Body'         => $data,
-            'CacheControl' => 'max-age=1296000',
+            'CacheControl' => 'max-age='.$this->maxAge,
             'ACL'          => 'public-read'
         ));
 
@@ -88,9 +91,7 @@ class AWSFileService extends \samson\core\CompressableService implements IFileSy
      */
     public function exists($filename)
     {
-        // TODO: Change to curl - as this method fetches all response!
-        
-        return strlen(file_get_contents($filename)) > 0;
+        return $this->client->if_object_exists($this->bucket, $filename);
     }
 
     /**
