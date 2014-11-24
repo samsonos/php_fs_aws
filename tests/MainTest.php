@@ -35,11 +35,12 @@ class MainTest extends \PHPUnit_Framework_TestCase
         $this->fileService->bucketURL = 'http://testbucket';
 
         // Initialize service without our S3 client
-        //$this->fileService->init();
+        $this->fileService->init();
 
         // Create S3 mock
         $this->client = $this->getMockBuilder('Aws\S3\S3Client')
             ->disableOriginalConstructor()
+            ->setMethods(array('if_object_exists'))
             ->getMock();
 
         // Add method stub
