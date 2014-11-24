@@ -88,7 +88,7 @@ class AWSFileService extends \samson\core\CompressableService implements IFileSy
      */
     public function exists($filename)
     {
-        // TODO: Change to curl - as this method fetches all responce!
+        // TODO: Change to curl - as this method fetches all response!
         
         return file_get_contents($filename);
     }
@@ -109,21 +109,25 @@ class AWSFileService extends \samson\core\CompressableService implements IFileSy
      * @param $filePath string Path to file
      * @param $filename string
      * @param $uploadDir string
-     * @return mixed
+     * @return bool|string False if failed otherwise path to moved file
      */
     public function move($filePath, $filename, $uploadDir)
     {
-        // Upload file to Amazon S3
-        $this->client->putObject(array(
-            'Bucket'       => $this->bucket,
-            'Key'          => $uploadDir.'/'.$filename,
-            'SourceFile'   => $filePath,
-            'CacheControl' => 'max-age=1296000',
-            'ACL'          => 'public-read'
-        ));
+        // Check if moving file exists
+        if ($this->exists($filePath)) {
+            // Read file
+            $data = $this->read($filePath, $filename);
 
-        // Remove current file
-        $this->delete($filePath);
+            // Write file
+            $movedPath = $this->write($data, $filename, $uploadDir);
+
+            // Remove current file
+            $this->delete($filePath);
+
+            return $movedPath;
+        }
+
+        return false;
     }
 
     /**

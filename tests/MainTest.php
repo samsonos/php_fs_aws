@@ -70,49 +70,24 @@ class MainTest extends \PHPUnit_Framework_TestCase
     public function testRead()
     {
         // Perform write
-        $data = $this->fileService->read('123', __FILE__);
+        $data = $this->fileService->read(__FILE__, basename(__FILE__));
 
         // Perform test
-        $this->assertEquals('123', $data, 'File service reading failed');
+        $this->assertStringEqualsFile(__FILE__, $data, 'File service reading failed');
     }
 
-    /** Test file service writing failed */
-   /* public function testFailWrite()
-    {
-        // Get instance using services factory as error will signal other way
-        $this->fileService = \samson\core\Service::getInstance('samson\fs\LocalFileService');
-
-        // Create temporary file
-        $path = __DIR__.'/test/test.txt';
-
-        // Write data to temporary file
-        $this->fileService->write('123', $path);
-
-        // Read data from file
-        $data = $this->fileService->read($path);
-
-        // Perform test
-        $this->assertNotEquals('123', $data, 'File service failed writing failed');
-    }*/
-
     /** Test file service deleting */
-   /* public function testDelete()
+    public function testDelete()
     {
-        // Get instance using services factory as error will signal other way
-        $this->fileService = \samson\core\Service::getInstance('samson\fs\LocalFileService');
-
-        // Create temporary file
-        $path = tempnam(sys_get_temp_dir(), 'test');
-
         // Delete temporary file
-        $this->fileService->delete($path);
+        $result = $this->fileService->delete(tempnam(sys_get_temp_dir(), 'test'));
 
         // Perform test
-        $this->assertFileNotExists($path, 'File service deleting failed');
-    }*/
+        $this->assertFileNotExists($result, 'File service deleting failed');
+    }
 
     /** Test file service existing */
-   /* public function testExists()
+    public function testExists()
     {
         // Get instance using services factory as error will signal other way
         $this->fileService = \samson\core\Service::getInstance('samson\fs\LocalFileService');
@@ -125,7 +100,7 @@ class MainTest extends \PHPUnit_Framework_TestCase
 
         // Perform test
         $this->assertEquals(true, $exists, 'File service exists failed');
-    }*/
+    }
 
     /** Test file service moving */
     /*public function testMove()
