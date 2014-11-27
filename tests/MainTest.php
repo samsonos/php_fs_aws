@@ -22,11 +22,7 @@ class MainTest extends \PHPUnit_Framework_TestCase
     {
         // Get instance using services factory as error will signal other way
         $this->fileService = \samson\core\Service::getInstance('samson\fs\AWSFileService');
-    }
 
-    /** Test initialize without client passing*/
-    public function testInitialize()
-    {
         // Initialize service with our S3 client
         $result = $this->fileService->init();
 
@@ -40,7 +36,11 @@ class MainTest extends \PHPUnit_Framework_TestCase
         $this->client = $this->getMockBuilder('Aws\S3\S3Client')
             ->disableOriginalConstructor()
             ->getMock();
+    }
 
+    /** Test initialize without client passing*/
+    public function testInitialize()
+    {
         // Initialize service with our S3 client
         $this->fileService->init(array('client' => & $this->client));
     }
