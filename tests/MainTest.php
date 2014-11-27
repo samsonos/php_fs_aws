@@ -36,11 +36,7 @@ class MainTest extends \PHPUnit_Framework_TestCase
         $this->client = $this->getMockBuilder('Aws\S3\S3Client')
             ->disableOriginalConstructor()
             ->getMock();
-    }
 
-    /** Test initialize without client passing*/
-    public function testInitialize()
-    {
         // Initialize service with our S3 client
         $this->fileService->init(array('client' => & $this->client));
     }
