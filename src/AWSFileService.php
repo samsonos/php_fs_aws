@@ -89,7 +89,7 @@ class AWSFileService extends \samson\core\CompressableService implements IFileSy
     public function exists($url)
     {
         // Get file key name on amazon s3
-        $fileKey = str_replace($this->bucketURL.'/', '', $url);
+        $fileKey = preg_replace('/.*'.quotemeta($this->bucket).'\//', '', $url);
         return $this->client->doesObjectExist($this->bucket, $fileKey);
     }
 
