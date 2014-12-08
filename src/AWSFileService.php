@@ -207,7 +207,7 @@ class AWSFileService extends \samson\core\CompressableService implements IFileSy
         }
 
         // Sort results
-        if(sizeof($result)) {
+        if (sizeof($result)) {
             sort($result);
         }
 
