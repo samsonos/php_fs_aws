@@ -160,4 +160,72 @@ class AWSFileService extends \samson\core\CompressableService implements IFileSy
 
         return $extension;
     }
+
+    /**
+     * Define if $filePath is directory
+     * @param string $filePath Path
+     * @return boolean Is $path a directory or not
+     */
+    public function isDir($filePath) {
+        $isDir = false;
+        if ($this->exists($filePath)) {
+            $isDir = $this->isKeyDir($$filePath);
+        }
+        return $isDir;
+    }
+
+    /**
+     * Get $path listing collection
+     * @param string    $path       Path for listing contents
+     * @param array     $extensions Collection of file extensions to filter
+     * @param int       $maxLevel   Maximum nesting level
+     * @param int       $level      Current nesting level of recursion
+     * @param array     $restrict   Collection of restricted paths
+     * @param array     $result   Collection of restricted paths
+     * @return array    $result     Resulting collection used in recursion
+     */
+    public function dir(
+        $path,
+        $extensions = null,
+        $maxLevel = null,
+        $level = 0,
+        $restrict = array('.git','.svn','.hg', '.settings'),
+        & $result = array()
+    ) {
+        $iterator = $this->client->getIterator('ListObjects', array(
+            'Bucket' => $this->bucket,
+            'Prefix' => $path
+        ));
+
+        foreach ($iterator as $object) {
+            $key = $object['Key'];
+            if (!$this->isKeyDir($key)) {
+                if (!isset($extensions) || in_array(pathinfo($key, PATHINFO_EXTENSION), $extensions)) {
+                    $result[] = $key;
+                }
+            }
+        }
+
+        // Sort results
+        if(sizeof($result)) {
+            sort($result);
+        }
+
+        return $result;
+    }
+
+    /**
+     * Define if $objectKey is directory
+     * @param $objectKey Object Key
+     * @return bool Is $objectKey a directory or not
+     */
+    private function isKeyDir($objectKey)
+    {
+        $isDir = false;
+        $fileKey = preg_replace('/.*'.quotemeta($this->bucket).'\//', '', $objectKey);
+        if (($last = substr($fileKey, -1)) === '/') {
+            $isDir = true;
+        }
+        return $isDir;
+    }
 }
