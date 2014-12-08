@@ -166,7 +166,8 @@ class AWSFileService extends \samson\core\CompressableService implements IFileSy
      * @param string $filePath Path
      * @return boolean Is $path a directory or not
      */
-    public function isDir($filePath) {
+    public function isDir($filePath)
+    {
         $isDir = false;
         if ($this->exists($filePath)) {
             $isDir = $this->isKeyDir($$filePath);
