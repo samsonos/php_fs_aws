@@ -178,8 +178,7 @@ class AWSFileService extends \samson\core\CompressableService implements IFileSy
     /**
      * Get $path listing collection
      * @param string    $path       Path for listing contents
-     * @param array     $extensions Collection of file extensions to filter
-     * @param int       $maxLevel   Maximum nesting level
+     * @param int       $maxLevel   Not used
      * @param int       $level      Current nesting level of recursion
      * @param array     $restrict   Collection of restricted paths
      * @param array     $result   Collection of restricted paths
@@ -187,7 +186,6 @@ class AWSFileService extends \samson\core\CompressableService implements IFileSy
      */
     public function dir(
         $path,
-        $extensions = null,
         $maxLevel = null,
         $level = 0,
         $restrict = array('.git','.svn','.hg', '.settings'),
@@ -201,9 +199,7 @@ class AWSFileService extends \samson\core\CompressableService implements IFileSy
         foreach ($iterator as $object) {
             $key = $object['Key'];
             if (!$this->isKeyDir($key)) {
-                if (!isset($extensions) || in_array(pathinfo($key, PATHINFO_EXTENSION), $extensions)) {
-                    $result[] = $key;
-                }
+                $result[] = $key;
             }
         }
 
