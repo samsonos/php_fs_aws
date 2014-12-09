@@ -176,7 +176,7 @@ class AWSFileService extends \samson\core\CompressableService implements IFileSy
     }
 
     /**
-     * Get $path listing collection
+     * Get recursive $path listing collection
      * @param string    $path       Path for listing contents
      * @param int       $maxLevel   Not used
      * @param int       $level      Current nesting level of recursion

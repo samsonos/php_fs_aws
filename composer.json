@@ -18,8 +18,7 @@
     ],
     "minimum-stability":"dev",
     "require":{
-        "samsonos/php_fs":"1.*",
-        "samsonos/php_fs_local":"1.*",
+        "samsonos/php_fs":"dev",
         "aws/aws-sdk-php": "2.*"
     },
     "require-dev": {
