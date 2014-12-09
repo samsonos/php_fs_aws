@@ -188,7 +188,7 @@ class AWSFileService extends \samson\core\CompressableService implements IFileSy
         $path,
         $maxLevel = null,
         $level = 0,
-        $restrict = array('.git','.svn','.hg', '.settings'),
+        $restrict = array(),
         & $result = array()
     ) {
         $iterator = $this->client->getIterator('ListObjects', array(
