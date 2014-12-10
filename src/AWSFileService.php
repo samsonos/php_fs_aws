@@ -56,7 +56,7 @@ class AWSFileService extends AbstractFileService
      * @param mixed $data Data to be written
      * @param string $filename File name
      * @param string $uploadDir Relative file path
-     * @return string|boolean Relative path to created file, false if there were errors
+     * @return string Relative path to created file, false if there were errors
      */
     public function write($data, $filename = '', $uploadDir = '')
     {
@@ -112,7 +112,7 @@ class AWSFileService extends AbstractFileService
     /**
      * Get file extension in current file system
      * @param $filePath string Path
-     * @return string|bool false if extension not found, otherwise file extension
+     * @return string false if extension not found, otherwise file extension
      */
     public function extension($filePath)
     {
