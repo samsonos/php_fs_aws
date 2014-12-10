@@ -32,5 +32,6 @@
         "psr-0": {
             "samson\\fs\\": "src/"
         }
-    }
+    },
+    "extra": { "samson_module_ignore": "1" }
 }
