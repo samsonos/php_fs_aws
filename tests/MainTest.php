@@ -30,6 +30,7 @@ class MainTest extends \PHPUnit_Framework_TestCase
 
         // Set test bucket URL
         $this->fileService->bucketURL = 'http://testbucket';
+        $this->fileService->bucket = 'testbucket';
     }
 
     /** Test file service writing */
@@ -99,12 +100,17 @@ class MainTest extends \PHPUnit_Framework_TestCase
     }
 
     /** Test file service dir method */
-    /*public function testDir()
+    public function testDir()
     {
+        // Add method stub
+        $this->client
+            ->expects($this->once())
+            ->method('getIterator')
+            ->willReturn(array(array('Key'=>'company/'), array('Key'=>'company.test')));
         // Scan project root dir
-        $files = $this->fileService->dir(dirname(dirname(__FILE__)));
-
-        // Perform test
-        $this->assertEquals(true, in_array(__FILE__, $files), 'File service dir failed - This file is not found in listing');
-    }*/
+        $files = $this->fileService->dir('/');
+         // Perform test
+        $this->assertEquals(true, in_array('company.test', $files), 'File service dir failed - This file is not found in listing');
+        $this->assertEquals(false, in_array('company/', $files), 'File service dir failed - This dir is found in listing');
+    }
 }
