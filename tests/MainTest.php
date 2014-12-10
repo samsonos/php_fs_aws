@@ -113,4 +113,15 @@ class MainTest extends \PHPUnit_Framework_TestCase
         $this->assertEquals(true, in_array('company.test', $files), 'File service dir failed - This file is not found in listing');
         $this->assertEquals(false, in_array('company/', $files), 'File service dir failed - This dir is found in listing');
     }
+
+    public function testIsDir()
+    {
+        // Add method stub
+        $this->client
+            ->expects($this->once())
+            ->method('doesObjectExist')
+            ->willReturn(true);
+        // Perform test
+        $this->assertEquals(true, $this->fileService->isDir('company/'));
+    }
 }

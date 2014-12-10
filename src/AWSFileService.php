@@ -136,7 +136,7 @@ class AWSFileService extends AbstractFileService
     {
         $isDir = false;
         if ($this->exists($filePath)) {
-            $isDir = $this->isKeyDir($$filePath);
+            $isDir = $this->isKeyDir($filePath);
         }
         return $isDir;
     }
