@@ -20,25 +20,16 @@ class MainTest extends \PHPUnit_Framework_TestCase
     /** Tests init */
     public function setUp()
     {
-        // Get instance using services factory as error will signal other way
-        $this->fileService = \samson\core\Service::getInstance('samson\fs\AWSFileService');
-
-        // Initialize service with our S3 client
-        $result = $this->fileService->init();
-
-        // Set test bucket URL
-        $this->fileService->bucketURL = 'http://testbucket';
-
-        // Initialize service without our S3 client
-        $this->fileService->init();
-
         // Create S3 mock
         $this->client = $this->getMockBuilder('Aws\S3\S3Client')
             ->disableOriginalConstructor()
             ->getMock();
 
-        // Initialize service with our S3 client
-        $this->fileService->init(array('client' => & $this->client));
+        // Get instance using services factory as error will signal other way
+        $this->fileService = new \samson\fs\AWSFileService($this->client);
+
+        // Set test bucket URL
+        $this->fileService->bucketURL = 'http://testbucket';
     }
 
     /** Test file service writing */
@@ -107,41 +98,13 @@ class MainTest extends \PHPUnit_Framework_TestCase
         );
     }
 
-    /** Test file service move */
-    public function testMove()
+    /** Test file service dir method */
+    /*public function testDir()
     {
-        // Add method stub
-        $this->client
-            ->expects($this->once())
-            ->method('doesObjectExist')
-            ->willReturn(true);
-
-        // Create temporary file
-        $path = tempnam(sys_get_temp_dir(), 'test');
-
-        // Move existing file
-        $this->fileService->move($path, basename($path), 'remote/');
+        // Scan project root dir
+        $files = $this->fileService->dir(dirname(dirname(__FILE__)));
 
         // Perform test
-        $this->assertEquals(true, true);
-    }
-
-    /** Test file service move failed */
-    public function testMoveFail()
-    {
-        // Add method stub
-        $this->client
-            ->expects($this->once())
-            ->method('doesObjectExist')
-            ->willReturn(false);
-
-        // Create temporary file
-        $path = tempnam(sys_get_temp_dir(), 'test');
-
-        // Move null file
-        $this->fileService->move($path, basename($path), 'remote/');
-
-        // Perform test
-        $this->assertEquals(true, true);
-    }
+        $this->assertEquals(true, in_array(__FILE__, $files), 'File service dir failed - This file is not found in listing');
+    }*/
 }

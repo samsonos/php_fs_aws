@@ -14,11 +14,8 @@ use Aws\Common\Credentials\Credentials;
  * Amazon Web Services Adapter implementation
  * @package samson\upload
  */
-class AWSFileService extends \samson\core\CompressableService implements IFileSystem
+class AWSFileService extends AbstractFileService
 {
-    /** @var string Identifier */
-    protected $id = 'fs_aws';
-
     /** @var S3Client $client Aws services user */
     protected $client;
 
@@ -38,24 +35,19 @@ class AWSFileService extends \samson\core\CompressableService implements IFileSy
     public $maxAge = 1296000;
 
     /**
-     * Adapter initialization
-     * @param array $params
-     * @return bool
+     * @param null $client AWSClient Object
      */
-    public function init(array $params = array())
+    public function __construct($client = null)
     {
         // Get client object instance from input parameters
-        $this->client = & $params['client'];
+        $this->client = & $client;
         // No client is passed
-        if (!isset($params['client'])) {
+        if (!isset($this->client)) {
             // Use S3 clients, create authorization object and instantiate the S3 client with AWS credentials
             $this->client = S3Client::factory(array(
                 'credentials' => new Credentials($this->accessKey, $this->secretKey)
             ));
         }
-
-        // Call parent initialization
-        return parent::init($params);
     }
 
     /**
@@ -102,32 +94,6 @@ class AWSFileService extends \samson\core\CompressableService implements IFileSy
     public function read($filePath, $filename = null)
     {
         return file_get_contents($filePath);
-    }
-
-    /**
-     * Write a file to selected location
-     * @param $filePath string Path to file
-     * @param $filename string
-     * @param $uploadDir string
-     * @return bool|string False if failed otherwise path to moved file
-     */
-    public function move($filePath, $filename, $uploadDir)
-    {
-        // Check if moving file exists
-        if ($this->exists($filePath)) {
-            // Read file
-            $data = $this->read($filePath, $filename);
-
-            // Write file
-            $movedPath = $this->write($data, $filename, $uploadDir);
-
-            // Remove current file
-            $this->delete($filePath);
-
-            return $movedPath;
-        }
-
-        return false;
     }
 
     /**
