@@ -46,7 +46,7 @@ class AWSFileService extends AbstractFileService
     /**
      * Initialization stage
      */
-    public function init()
+    public function initialise()
     {
         // No client is passed
         if (!isset($this->client)) {
