@@ -51,6 +51,17 @@ class AWSFileService extends AbstractFileService
     }
 
     /**
+     * Set Aws services user
+     * @param $client Aws services user
+     * @return $this
+     */
+    public function setClient($client)
+    {
+        $this->client = $client;
+        return $this;
+    }
+
+    /**
      * Write data to a specific relative location
      *
      * @param mixed $data Data to be written

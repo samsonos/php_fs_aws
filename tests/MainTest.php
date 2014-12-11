@@ -26,7 +26,8 @@ class MainTest extends \PHPUnit_Framework_TestCase
             ->getMock();
 
         // Get instance using services factory as error will signal other way
-        $this->fileService = new \samson\fs\AWSFileService($this->client);
+        $this->fileService = new \samson\fs\AWSFileService();
+        $this->fileService->setClient($this->client);
 
         // Set test bucket URL
         $this->fileService->bucketURL = 'http://testbucket';
