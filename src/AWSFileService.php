@@ -58,17 +58,6 @@ class AWSFileService extends AbstractFileService
     }
 
     /**
-     * Set Aws services user
-     * @param $client Aws services user
-     * @return $this
-     */
-    public function setClient($client)
-    {
-        $this->client = $client;
-        return $this;
-    }
-
-    /**
      * Write data to a specific relative location
      *
      * @param mixed $data Data to be written
@@ -99,7 +88,7 @@ class AWSFileService extends AbstractFileService
     public function exists($url)
     {
         // Get file key name on amazon s3
-        $fileKey = preg_replace('/.*'.quotemeta($this->bucket).'\//', '', $url);
+        $fileKey = str_replace($this->bucketURL, '', $url);
         return $this->client->doesObjectExist($this->bucket, $fileKey);
     }
 
