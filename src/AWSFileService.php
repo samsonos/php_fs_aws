@@ -41,6 +41,13 @@ class AWSFileService extends AbstractFileService
     {
         // Get client object instance from input parameters
         $this->client = & $client;
+    }
+
+    /**
+     * Initialization stage
+     */
+    public function init()
+    {
         // No client is passed
         if (!isset($this->client)) {
             // Use S3 clients, create authorization object and instantiate the S3 client with AWS credentials
